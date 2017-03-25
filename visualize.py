@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import csv
+from sklearn.neighbors import KNeighborsClassifier
 
 data_df = pd.read_csv('EOD-AAPL.csv')
 
@@ -49,22 +50,40 @@ del data_df['Adj_Close_S']
 data_df.to_csv('TEMP.csv', sep = ',')
 
 #FINAL TARGET CSV
-path1='TEMP.csv'
-path2='finaltarget.csv'
+path1 = 'TEMP.csv'
+path2 = 'finaltarget.csv'
 outdata = []
-i=0
-inp = open(path1,'r', newline='')
-output = open(path2,'w', newline='')
-reader=csv.reader(inp, delimiter=',')
-writer=csv.writer(output,delimiter=',')
+i = 0
+inp = open(path1, 'r', newline='')
+output = open(path2, 'w', newline='')
+reader = csv.reader(inp, delimiter=',')
+writer = csv.writer(output, delimiter=',')
 for row in reader:
         if i <= 8001:
-            outdata.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]])
+            outdata.append([row[0], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[10]])
         i=i+1
 writer.writerows(outdata)
 
-#Plotting Adjusted Close Graph
+#y=np.genfromtxt('target.csv', delimiter=',')
+f = open('finaltarget.csv')
+f.readline()  # skip the header
+data = np.loadtxt(f, delimiter=',') #,converters={1: strpdate2num('%m-%d-%Y')})
+
+X=data[:,1:7]
+
+y=data[:,8]
+#y.reshape(1,-1)
+#print(y)
+
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X,y)
+print(knn.predict([['140.4', '140.02', '139.025', '139.2', '15309065', '138.99']]))
+
+#print('')
+
+#print(X)
 '''
+#Plotting Adjusted Close Graph
 z=data_df['Adj_Close']
 plt.interactive(False)
 plt.plot(data_df.time,z)
