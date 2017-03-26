@@ -2,7 +2,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import csv
+import sklearn.model_selection as sk
+from sklearn import svm
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+
 
 data_df = pd.read_csv('EOD-AAPL.csv')
 
@@ -49,6 +53,8 @@ del data_df['Adj_Close_S']
 
 data_df.to_csv('TEMP.csv', sep = ',')
 
+print('FINALIZED TEST DATA')
+
 #FINAL TARGET CSV
 path1 = 'TEMP.csv'
 path2 = 'finaltarget.csv'
@@ -70,23 +76,42 @@ f.readline()  # skip the header
 data = np.loadtxt(f, delimiter=',') #,converters={1: strpdate2num('%m-%d-%Y')})
 
 X=data[:,1:7]
-
 y=data[:,8]
-#y.reshape(1,-1)
-#print(y)
 
-knn = KNeighborsClassifier(n_neighbors=3)
-knn.fit(X,y)
-print(knn.predict([['140.4', '140.02', '139.025', '139.2', '15309065', '138.99']]))
+#Validation
+X_train, X_test, y_train, y_test = sk.train_test_split(X, y, test_size=0.33, random_state=42)
+#print(X_train)
 
-#print('')
+np.savetxt('q.csv', X_train, delimiter = ',')
+np.savetxt('r.csv', y_train, delimiter = ',')
+
+#clf = svm.SVC(kernel='linear', C=1).fit(X_train, y_train)
+#print(clf.score(X.test, y.test))
+
+print('RUNNING ALGORITHM')
+
+clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(100, 20), random_state=1)
+clf.fit(X_train, y_train)
+print(clf.score(X_test, y_test))
+
+'''
+count=1
+while count < 50:
+    knn = KNeighborsClassifier(n_neighbors=count)
+    knn.fit(X_train,y_train)
+    print(knn.score(X_test, y_test))
+    count = count + 1
+'''
+
+print('FINISHED')
 
 #print(X)
 '''
 #Plotting Adjusted Close Graph
 z=data_df['Adj_Close']
 plt.interactive(False)
-plt.plot(data_df.time,z)
+plt.plot(y_train,y_test)
 plt.show()
 print("FINISHED")
+
 '''
