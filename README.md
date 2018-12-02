@@ -1,7 +1,7 @@
 # Stock Market Prediction
 
 A regression and classification problem to calculate the closing price of the NASDAQ
-composite index on a given day based on a series of domain-centric feature vectors.
+composite index on a given day based on a series of domain-centric feature vectors. I compared two research papers based on the different methodologies used.
 
 ## Introduction
 
