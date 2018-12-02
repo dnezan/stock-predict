@@ -38,16 +38,16 @@ shuffle=True, max_iter=150, random_state=1, momentum=0.75, alpha=0.4)**
   
 There are three solvers available in sci-kit learn out of which lfbgs has been used here. The
 other parameters are quantified below.
-Before fitting X and y, we must first normalize the input vectors in order to avoid local
+Before fitting X and y, I must first normalize the input vectors in order to avoid local
 optima.
 The epoch number (maximum iterations) was determined by running an iteration of the
 MLP before a constant mean error was reached.  
 ![one](https://raw.githubusercontent.com/dnezan/stock-predict/master/results/epoch.png)    
   
   
-We reached a lower number of maximum iterations than the research paper due to a much
+I reached a lower number of maximum iterations than the research paper due to a much
 larger dataset.
-Using this epoch value, we can calculate the mean square error to compare accuracy with
+Using this epoch value, I can calculate the mean square error to compare accuracy with
 the research paper. The authors have attained error in the range of -120 to +100. The mean
 square error obtained by us is 210.01, and the error range is as follows.
 ![two](https://raw.githubusercontent.com/dnezan/stock-predict/master/results/abserror.png)    
@@ -72,7 +72,7 @@ between two companies. The relationship between two companies who collaborate is
 associative, and each company will see a profit if its partner company also sees a profit.
 **However, this assumption was not justified in the research paper, and further
 reproducibility was hindered due to very vague methodologies used.**
-Therefore, we implement traditional SVM to our first research paper and compare results.
+Therefore, I implement traditional SVM to our first research paper and compare results.
 _class ​_ sklearn.svm.​ **SVR(C = 1000.0, epsilon= 0.1, cache_size=10000)**
 The parameters can be​ **​** further tuned using the GridSearch algorithm.  
 ![four](https://raw.githubusercontent.com/dnezan/stock-predict/master/results/gridsearch.png)
